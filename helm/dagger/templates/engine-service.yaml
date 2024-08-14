@@ -1,0 +1,12 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ include "dagger.fullname" . }}-service
+spec:
+  selector:
+    name: {{ include "dagger.fullname" . }}-engine
+  ports:
+    - protocol: TCP
+      port: 2555
+      targetPort: 2555

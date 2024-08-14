@@ -1,0 +1,83 @@
+nameOverride: ""
+fullnameOverride: ""
+
+engine:
+  replicas: 2
+  ### Customize your Dagger Engine
+  # https://github.com/moby/buildkit/blob/5997099/cmd/buildkitd/config/config.go
+  config: |
+    debug = true
+    # insecure-entitlements = [ "security.insecure" ]
+    # [registry."registry:5000"]
+    #   http = true
+    # [registry."docker.io"]
+    #   mirrors = [ "mirror.gcr.io" ]
+    [log]
+      format = "json"
+    [grpc]
+      address = [ "tcp://0.0.0.0:2555" ]
+      # [grpc.tls]
+      #   cert = "/etc/buildkit/tls.crt"
+      #   key = "/etc/buildkit/tls.key"
+      #   ca = "/etc/buildkit/tlsca.crt"
+  labels: {}
+  ### Customize Dagger Engine start args
+  # "--oci-max-parallelism num-cpu" is kept as the default behaviour so that we don't surprise users.
+  # You may want to remove it in your deployments. FTR: https://github.com/dagger/dagger/pull/7395
+  args:
+    - "--oci-max-parallelism"
+    - "num-cpu"
+  resources:
+    limits: {}
+    # limits:
+    #    cpu: "1"
+    #    memory: 1Gi
+    requests: {}
+    # requests:
+    #    cpu: "1"
+    #    memory: 1Gi
+  image:
+    repository: registry.dagger.io/engine
+    ### See https://github.com/dagger/dagger/blob/main/CHANGELOG.md for a list of available versions.
+    ### You can also use a specific git sha from https://github.com/dagger/dagger/commits/main/
+    # tag: PICK_A_CUSTOM_VERSION
+    pullPolicy: IfNotPresent
+  ### Set taints & tolerations for this workload
+  # tolerations:
+  #   - effect: NoSchedule
+  #     key: dagger-runner
+  #     operator: Exists
+  # affinity:
+  #   nodeAffinity:
+  #     requiredDuringSchedulingIgnoredDuringExecution:
+  #       nodeSelectorTerms:
+  #         - matchExpressions:
+  #             - key: actions-runner
+  #               operator: Exists
+  ### Set priorityClassName to avoid eviction
+  priorityClassName: ""
+  readinessProbeSettings:
+    initialDelaySeconds: 5
+    timeoutSeconds: 30
+    periodSeconds: 15
+    successThreshold: 1
+    failureThreshold: 10
+  terminationGracePeriodSeconds: 300
+  newServiceAccount:
+    # name: "dagger-helm"
+    create: false
+    annotations: []
+  existingServiceAccount: {}
+    # name: "default"
+
+  nfsCache:
+    server: nfs-volumes.kubernetes.internal
+    path:   /var/vcap/data/nfs-volumes/dagger-cache
+
+magicache:
+  enabled: false
+  url: https://api.dagger.cloud/magicache
+  ### Create your token via https://docs.dagger.io/cloud/572923/get-started#step-2-connect-dagger-cloud-with-your-ci
+  # token: YOUR_DAGGER_CLOUD_TOKEN
+  ### If secretName is set, a new secret will NOT be created
+  # secretName: EXISTING_SECRET_NAME
