@@ -30,10 +30,32 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.engine.affinity }}
+      # {{- with .Values.engine.affinity }}
+      # affinity:
+      #   {{- toYaml . | nindent 8 }}
+      # {{- end }}
       affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        podAntiAffinity:
+          # preferredDuringSchedulingIgnoredDuringExecution:
+          #   - weight: 100
+          #     podAffinityTerm:
+          #       labelSelector:
+          #         matchExpressions:
+          #           - key: app.kubernetes.io/name
+          #             operator: In
+          #             values:
+          #               - {{ include "dagger.name" . }}
+          #       namespaces: [ {{ .Release.Namespace }} ]
+          #       topologyKey: kubernetes.io/hostname
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - {{ include "dagger.name" . }}
+              namespaces: [ {{ .Release.Namespace }} ]
+              topologyKey: kubernetes.io/hostname
       securityContext:
         runAsUser: 0
         runAsGroup: 1001
