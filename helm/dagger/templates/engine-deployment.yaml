@@ -120,8 +120,9 @@ spec:
             path: /var/lib/dagger
           {{- end }}
 
-        # This is for sharing the /var/run/dagger/buildkitd.sock
-        # (but.. what for?? is the dagger CLI using this??)
+        # This is for sharing the /var/run/dagger/buildkitd.sock with host.
+        # In our context though, the dagger CLI uses the value of the
+        # _EXPERIMENTAL_DAGGER_RUNNER_HOST environment variable instead.
         - name: varrundagger
           hostPath:
             path: /var/run/dagger
