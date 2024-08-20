@@ -87,6 +87,9 @@ There is a `/var/lib/dagger/buildkitd.lock` lock that prevents the
 - Understand the reasons behind the `/var/lib/dagger/buildkitd.lock` and get
   rid of it.
 - Adopt performance-friendly local volumes, like a `zfs` storage with OpenEBS.
+- Configure the `[grpc.tls]` section of the `buildkitd.toml` configuration, as
+  allowed by the `engine.config` value, so that TCP traffic is properly
+  encrypted and Dagger clients properly authenticated.
 
 
 Usage

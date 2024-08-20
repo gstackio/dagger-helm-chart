@@ -4,7 +4,8 @@ fullnameOverride: ""
 engine:
   replicas: 2
   ### Customize your Dagger Engine
-  # https://github.com/moby/buildkit/blob/5997099/cmd/buildkitd/config/config.go
+  # See: https://github.com/moby/buildkit/blob/5997099/cmd/buildkitd/config/config.go#L8-L36
+  # See also: https://www.aidoos.com/kb/devops-docker-buildkit-toml-configuration/
   config: |
     debug = true
     # insecure-entitlements = [ "security.insecure" ]
