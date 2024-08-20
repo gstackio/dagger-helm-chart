@@ -30,11 +30,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      # {{- with .Values.engine.affinity }}
-      # affinity:
-      #   {{- toYaml . | nindent 8 }}
-      # {{- end }}
       affinity:
+        {{- with .Values.engine.affinity.nodeAffinity }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         podAntiAffinity:
           # preferredDuringSchedulingIgnoredDuringExecution:
           #   - weight: 100
